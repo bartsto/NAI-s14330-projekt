@@ -85,7 +85,7 @@ int main(int argc, char** argv)
 
 			if (iLastX >= 0 && iLastY >= 0 && posX >= 0 && posY >= 0)
 			{
-				line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 255, 0), 2, LINE_AA);
+				line(imgLines, Point(posX, posY), Point(iLastX, iLastY), Scalar(0, 255, 0), 3, LINE_AA);
 			}
 
 			iLastX = posX;
@@ -98,32 +98,39 @@ int main(int argc, char** argv)
 		imgOriginal = imgOriginal + imgLines;
 		imshow("Original", imgOriginal);
 
-		Mat src = imgLines;
-		Mat gray;
-		cvtColor(src, gray, COLOR_BGR2GRAY);
-		medianBlur(gray, gray, 5);
-		vector<Vec3f> circles;
-		HoughCircles(gray, circles, HOUGH_GRADIENT, 1,
-			gray.rows / 50,
-			200, 30, 1, 60 // ostatnie dwa parametry (min_radius & max_radius)
-		);
-		for (size_t i = 0; i < circles.size(); i++)
-		{
-			Vec3i c = circles[i];
-			Point center = Point(c[0], c[1]);
-			// srodek okregu
-			circle(src, center, 1, Scalar(0, 100, 100), 3, LINE_AA);
-			// okrag
-			int radius = c[2];
-			circle(src, center, radius, Scalar(255, 0, 255), 1, LINE_AA);
-		}
-		imshow("Detected circles", src);
-
 		if (waitKey(30) == 112) {
 			imwrite("file.png", imgOriginal);
 			Mat picture = imread("file.png", 1);
 
-			imshow("Screenshot", picture);
+			Mat gray;
+			cvtColor(picture, gray, COLOR_BGR2GRAY);
+			vector<Vec3f> circles;
+			HoughCircles(gray, circles, HOUGH_GRADIENT, 1,
+				gray.rows / 50,
+				200, 30, 1, 60 // ostatnie dwa parametry (min_radius & max_radius)
+			);
+			Vec3i c;
+			for (size_t i = 0; i < circles.size(); i++)
+			{
+				int max;
+				if (i == 0) {
+					max = circles[0].val[2];
+					c = circles[0];
+				}
+				else if (circles[i].val[2] > max) {
+					max = circles[i].val[2];
+					c = circles[i];
+				}
+
+			}
+
+			Point center = Point(c[0], c[1]);
+			// srodek okregu
+			circle(picture, center, 1, Scalar(0, 100, 100), 3, LINE_AA);
+			// okrag
+			int radius = c[2];
+			circle(picture, center, radius, Scalar(255, 0, 255), 2, LINE_AA);
+			imshow("Detected circles", picture);
 			
 		}
 
