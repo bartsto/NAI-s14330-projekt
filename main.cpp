@@ -119,6 +119,13 @@ int main(int argc, char** argv)
 		}
 		imshow("Detected circles", src);
 
+		if (waitKey(30) == 112) {
+			imwrite("file.png", imgOriginal);
+			Mat picture = imread("file.png", 1);
+
+			imshow("Screenshot", picture);
+			
+		}
 
 		if (waitKey(30) == 27) //ESC
 		{
