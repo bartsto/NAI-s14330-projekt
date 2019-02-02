@@ -18,8 +18,8 @@ int main(int argc, char** argv)
 	
 	namedWindow("Settings", CV_WINDOW_AUTOSIZE);
 
-	int lowRange[3] = { 0,150,60 };
-	int highRange[3] = { 255,255,255 };
+	int lowRange[3] = { 52,175,45 };
+	int highRange[3] = { 152,275,245 };
 
 
 	createTrackbar("Low Hue", "Settings", &(lowRange[0]), 255);
