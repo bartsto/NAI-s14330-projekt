@@ -105,7 +105,7 @@ int main(int argc, char** argv)
 		vector<Vec3f> circles;
 		HoughCircles(gray, circles, HOUGH_GRADIENT, 1,
 			gray.rows / 50,
-			100, 30, 1, 40 // ostatnie dwa parametry (min_radius & max_radius)
+			200, 30, 1, 60 // ostatnie dwa parametry (min_radius & max_radius)
 		);
 		for (size_t i = 0; i < circles.size(); i++)
 		{
